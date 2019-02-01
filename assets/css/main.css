@@ -1,0 +1,20 @@
+* {
+  margin: 0;
+  padding: 0;
+
+  font-family: system, -apple-system, "San Francisco", ".SFNSDisplay-Regular", "Segoe UI", Segoe, "Segoe WP", "Helvetica Neue", helvetica, "Lucida Grande", arial, sans-serif;
+}
+
+.button {
+  padding: 0.35em 1.0em;
+  margin: 0;
+  user-select: none;
+  background: none;
+	color: inherit;
+	border: none;
+	font: inherit;
+	cursor: pointer;
+	outline: inherit;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
