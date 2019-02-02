@@ -6,6 +6,7 @@
 }
 
 .button {
+  box-sizing: border-box;
   padding: 0.35em 1.0em;
   margin: 0;
   user-select: none;

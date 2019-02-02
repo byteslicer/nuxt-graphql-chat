@@ -41,6 +41,10 @@
     text-align: left;
   }
 
+  .media-content {
+    min-width: 12vw;
+  }
+
   @media screen and (max-width: 600px) {
     .media-content {
       flex: 1;
