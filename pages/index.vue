@@ -5,10 +5,7 @@
         <Message v-for="post in posts" :author="post.author" :message="post.comment" :time="post.time"/>
       </div>
     </div>
-    <form class="chat-control" @submit.prevent="addPost">
-      <button type="submit" class="button">SEND</button>
-      <input v-model="chatInput" class="chat-input" type="text" />
-    </form>
+    <ChatInput v-model="chatInput" @submit="addPost" />
   </div>
 </template>
 
@@ -27,31 +24,6 @@
     display: flex;
     flex: 1;
     overflow-y: scroll;
-  }
-
-  .chat-control {
-    color: rgba(255, 255, 255, 0.6);
-    background-color: rgb(15, 32, 45);
-    margin: 10px;
-    border-radius: 10px;
-  }
-
-  .chat-input {
-    color: rgba(255, 255, 255, 0.6);
-    background-color: rgb(15, 32, 45);
-    margin: 0;
-    border: none;
-    border-left: 1px solid rgb(11, 25, 36);
-    font-size: 1.0rem;
-    padding: 10px;
-  }
-
-  .chat-input:focus {
-    outline: none;
-  }
-
-  .chat-input:placeholder {
-    color: rgb(85, 94, 102);
   }
 
   .messages {
@@ -74,6 +46,7 @@
 import moment from 'moment'
 
 import gql from 'graphql-tag';
+import ChatInput from '@/components/chat-input'
 import Message from '@/components/message'
 
 
@@ -87,7 +60,7 @@ const POST_QUERY = gql`{
 }`
 
 export default {
-  components: { Message },
+  components: { Message, ChatInput },
   data() {
     return {
       username: "Byteslicer",
