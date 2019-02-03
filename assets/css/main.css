@@ -19,3 +19,7 @@
   -webkit-appearance: none;
   -moz-appearance: none;
 }
+
+.v--modal {
+  background-color: #060e14;
+}

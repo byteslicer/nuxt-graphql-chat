@@ -56,7 +56,7 @@
   }
 
   .message-box {
-    background-color: rgb(23, 43, 58);
+    background-color: #17374f;
     padding: 0.5rem;
     margin: 0.5rem 0;
     border-radius: 6px;

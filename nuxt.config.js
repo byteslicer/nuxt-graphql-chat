@@ -23,12 +23,23 @@ module.exports = {
     '@/assets/css/main.css'
   ],
 
+  plugins: ['@/plugins/modal'],
+
   /*
   ** Nuxt.js modules
   */
   modules: [
 //    'nuxt-buefy',
     '@nuxtjs/apollo',
+    ['nuxt-fontawesome', {
+      imports: [
+        //import whole set
+        {
+          set: '@fortawesome/free-solid-svg-icons',
+          icons: ['fas']
+        }
+      ]
+    }]
   ],
 
   apollo: {

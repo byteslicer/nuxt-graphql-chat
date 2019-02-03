@@ -1,18 +1,21 @@
 <template>
   <svg height="32" width="32" viewBox="0 0 160 160">
+    <no-ssr>
     <g>
       <circle v-for="(value, index) in sortedValues"
+        :key="index"
         :cx="cx"
         :cy="cy"
         :r="radius"
         fill="transparent"
-        :stroke="rng.colorHSL()"
+        :stroke="filteredColor[index]"
         :stroke-width="strokeWidth"
         :stroke-dasharray="adjustedCircumference"
         :stroke-dashoffset="calculateStrokeDashOffset(value, circumference)"
         :transform="returnCircleTransformValue(index)"
         shape-rendering="optimizeQuality" ></circle>
     </g>
+    </no-ssr>
   </svg>
 </template>
 
@@ -27,7 +30,7 @@ export default {
 
   data() {
     return {
-      colors: ["#6495ED", "goldenrod", "#cd5c5c", "thistle", "lightgray"],
+      colorPalette: ["#1b85b8", "#5a5255", "#559e83", "#ae5a41", "#c3cb71"],
       cx: 80,
       cy: 80,
       radius: 60,
@@ -68,6 +71,21 @@ export default {
 
     adjustedCircumference() {
       return this.circumference - 2
+    },
+
+    colors() {
+      return this.sortedValues.map(() => this.rng.select(this.colorPalette))
+    },
+
+    filteredColor() {
+      let result = this.colors
+
+      for (var i = 1; i < result.length; i++) {
+        if(result[i] === result[i-1]) {
+          result[i] = this.rng.select(this.colorPalette)
+        }
+      }
+      return result
     }
   },
 
