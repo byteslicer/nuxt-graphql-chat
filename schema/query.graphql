@@ -1,7 +1,11 @@
 query Posts {
-  posts {
-    author
-    comment
-    time
+  messages {
+    id
+    user {
+      id
+      name
+    }
+    content
+    createdAt
  }
 }
