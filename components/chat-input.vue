@@ -28,6 +28,8 @@
 
   border-left: 1px solid #1d4462;
   font-size: 1.0rem;
+
+  border-radius: 0 5px 5px 0;
 }
 
 .button {

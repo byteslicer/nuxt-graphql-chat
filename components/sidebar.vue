@@ -1,7 +1,6 @@
 <template>
   <div class="sidebar">
     <div class="list">
-      List
     </div>
     <div class="account">
       <Avatar class="image" :seed="username" />

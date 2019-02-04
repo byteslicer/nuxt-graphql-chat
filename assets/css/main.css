@@ -1,11 +1,21 @@
+:root {
+  --main-bg-color: #12293b;
+  --main-txt-color: rgba(255, 255, 255, 0.6);
+}
+
 * {
   margin: 0;
   padding: 0;
 
+  color: var(--main-txt-color);
   font-family: system, -apple-system, "San Francisco", ".SFNSDisplay-Regular", "Segoe UI", Segoe, "Segoe WP", "Helvetica Neue", helvetica, "Lucida Grande", arial, sans-serif;
 }
 
-.button {
+body {
+  background-color: var(--main-bg-color);
+}
+
+button.button {
   box-sizing: border-box;
   padding: 0.35em 1.0em;
   margin: 0;
@@ -19,6 +29,34 @@
   -webkit-appearance: none;
   -moz-appearance: none;
 }
+
+input.input {
+  padding: 0 0;
+
+  background-color: #17374f;
+  margin: 0;
+  border: none;
+}
+
+input.input {
+  display: inline-block;
+
+  padding: 0 10px;
+  background-color: #17374f;
+  margin: 0;
+  border: none;
+  outline: none;
+}
+
+input.input:focus {
+  outline: none;
+}
+
+input.input::placeholder {
+  color: rgba(255, 255, 255, 0.2);
+}
+
+[v-cloak] { display: none }
 
 .v--modal {
   background-color: #060e14;

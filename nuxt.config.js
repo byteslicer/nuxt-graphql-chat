@@ -23,7 +23,7 @@ module.exports = {
     '@/assets/css/main.css'
   ],
 
-  plugins: ['@/plugins/modal'],
+  plugins: [],
 
   /*
   ** Nuxt.js modules

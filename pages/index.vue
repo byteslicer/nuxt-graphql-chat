@@ -1,13 +1,17 @@
 <template>
   <div class="site">
-    <modal name="edit">
-      Hello World
-    </modal>
-    <Sidebar class="left" :username="username"/>
+
+    <Sidebar class="left" :username="me.name"/>
+
     <div ref="messages" class="messages">
-      <Message v-for="post in posts" :key="post.id" :author="post.author" :message="post.comment" :time="post.time" />
+      <Message v-for="message in messages"
+        :key="message.id"
+        :author="message.user ? message.user.name : 'UserNotFound'"
+        :message="message.content"
+        :time="message.createdAt"
+        :loading="message.id === -1" />
     </div>
-    <ChatInput class="chat-input" v-model="chatInput" @submit="addPost" />
+    <ChatInput class="chat-input" v-model="chatInput" @submit="addMessage" />
   </div>
 </template>
 
@@ -26,9 +30,7 @@
 
     box-sizing: border-box;
     height: 100vh;
-
-    background-color: #12293b;
-    color: rgba(255, 255, 255, 0.6);
+    height: calc(var(--vh, 1vh) * 100);
   }
 
   @media screen and (max-width: 600px) {
@@ -36,6 +38,14 @@
       grid-template-areas:
       "content content"
       "input input";
+    }
+
+    .left {
+      display: none;
+    }
+
+    .chat-input {
+      margin-left: 10px;
     }
   }
 
@@ -63,7 +73,7 @@
   }
 
   .messages::-webkit-scrollbar-thumb {
-    background-color: rgb(23, 43, 58);
+    background-color: #17374f;
     outline: 1px solid slategrey;
   }
 </style>
@@ -76,12 +86,15 @@ import Sidebar from '@/components/sidebar'
 import ChatInput from '@/components/chat-input'
 import Message from '@/components/message'
 
-const POST_QUERY = gql`{
-  posts {
+const MESSAGE_QUERY = gql`{
+  messages {
     id
-    author
-    comment
-    time
+    user {
+      id
+      name
+    }
+    content
+    createdAt
  }
 }`
 
@@ -89,9 +102,18 @@ export default {
   components: { Message, ChatInput, Sidebar },
   data() {
     return {
-      username: "Peter",
+      me: { name: '' },
       chatInput: ""
     }
+  },
+
+  beforeRouteEnter (to, from, next) {
+    next(vm => {
+      const hasToken = !!vm.$apolloHelpers.getToken()
+      if (!hasToken) {
+        vm.$router.push({ path: 'login' })
+      }
+    })
   },
 
   beforeMount() {
@@ -111,7 +133,7 @@ export default {
   },
 
   methods: {
-    addPost() {
+    addMessage() {
       if (this.chatInput.length <= 0) return;
 
       const message = this.chatInput
@@ -119,79 +141,90 @@ export default {
 
       this.$apollo.mutate({
         mutation: gql`
-          mutation($author: String, $comment: String) {
-            addPost(author: $author, comment: $comment) {
+          mutation($content: String) {
+            addMessage(content: $content) {
               id
-              author
-              comment
+              user {
+                id
+                name
+              }
+              content
+              createdAt
             }
           }
         `,
         variables: {
-          author: this.username,
-          comment: message
+          content: message
         },
 
         // Update the cache with the result
         // The query will be updated with the optimistic response
         // and then with the real result of the mutation
-        update: (store, { data: { addPost } }) => {
-          console.log("A")
+        update: (store, { data: { addMessage } }) => {
           // Read the data from our cache for this query.
-          const data = store.readQuery({ query: POST_QUERY })
+          const data = store.readQuery({ query: MESSAGE_QUERY })
           // Add our tag from the mutation to the end
-          data.posts.push(addPost)
+          data.messages.push(addMessage)
           // Write our data back to the cache.
-          store.writeQuery({ query: POST_QUERY, data })
+          store.writeQuery({ query: MESSAGE_QUERY, data })
+
+
+          this.$refs.messages.scrollTop = this.$refs.messages.scrollHeight;
         },
 
         optimisticResponse: {
         __typename: 'Mutation',
-        addPost: {
-          __typename: 'Post',
+        addMessage: {
+          __typename: 'Message',
           id: -1,
-          author: this.username,
-          comment: message,
-          time: moment().format()
+          user: {
+            __typename: 'User',
+            id: -1,
+            name: this.me.name
+          },
+          content: message,
+          createdAt: moment().format()
         },
       },
 
       })
-      .then(() => {
-        this.$refs.messages.scrollTop = this.$refs.messages.scrollHeight;
-      })
       .catch((error) => {
+        console.error(error)
         this.chatInput = message
       })
     }
   },
 
   apollo: {
-    posts: {
-      query: POST_QUERY,
+    me: {
+      query: gql`{
+        me {
+          id,
+          name
+        }
+      }`,
+      prefetch: false,
+    },
+    messages: {
+      query: MESSAGE_QUERY,
+      prefetch: false,
       subscribeToMore: {
         document: gql`subscription {
-          postAdded {
+          messageAdded {
             id
-            author
-            comment
-            time
+            user {
+              id
+              name
+            }
+            content
+            createdAt
           }
         }`,
         updateQuery: (previousResult, { subscriptionData }) => {
-
-          const index = previousResult.posts.findIndex(
-            p => p.id === subscriptionData.data.postAdded.id
-          )
-          console.log("B")
-          console.log(index)
-
-          if (index !== -1 ) return previousResult;
-
           return {
-            posts: [
-              ...previousResult.posts,
-              subscriptionData.data.postAdded
+            messages: [
+              ...previousResult.messages,
+              subscriptionData.data.messageAdded
             ]
           }
         }

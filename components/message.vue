@@ -16,12 +16,17 @@
         </p>
       </div>
     </div>
+    <loader v-if="loading && timeout" class="loader" />
   </article>
 </template>
 
 <style scoped>
   .top-line {
 
+  }
+  .loader {
+
+    padding: 3px 10px;
   }
 
   .name {
@@ -36,6 +41,7 @@
 
   .media {
     padding-top: 10px;
+    padding-right: 10px;
     align-items: flex-start;
     display: flex;
     text-align: left;
@@ -60,17 +66,33 @@
     padding: 0.5rem;
     margin: 0.5rem 0;
     border-radius: 6px;
+    word-wrap: break-word;
   }
 </style>
 
 <script>
 import moment from 'moment'
 
+import loader from '@/components/small-loader'
 import avatar from '@/components/avatar'
 
 export default {
-  components: { avatar },
-  props: ['author', 'message', 'time'],
+  components: { avatar, loader },
+  props: ['author', 'message', 'time', 'loading'],
+
+  data() {
+    return {
+      timeout: false
+    }
+  },
+
+  mounted() {
+    if(this.loading) {
+      setTimeout(() => {
+       this.timeout = true
+      }, 100)
+    }
+  },
 
   filters: {
     fromNow: function (date) {

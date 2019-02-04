@@ -1,21 +1,26 @@
 <template>
   <svg height="32" width="32" viewBox="0 0 160 160">
-    <no-ssr>
-    <g>
-      <circle v-for="(value, index) in sortedValues"
-        :key="index"
-        :cx="cx"
-        :cy="cy"
-        :r="radius"
-        fill="transparent"
-        :stroke="filteredColor[index]"
-        :stroke-width="strokeWidth"
-        :stroke-dasharray="adjustedCircumference"
-        :stroke-dashoffset="calculateStrokeDashOffset(value, circumference)"
-        :transform="returnCircleTransformValue(index)"
-        shape-rendering="optimizeQuality" ></circle>
-    </g>
-    </no-ssr>
+      <g>
+        <circle :cx="cx" :cy="cy" :r="radius" fill="transparent" stroke="#0c1b27" :stroke-width="strokeWidth" shape-rendering="optimizeQuality"></circle>
+        <no-ssr>
+          <circle v-for="(value, index) in sortedValues"
+            :key="index"
+            :cx="cx"
+            :cy="cy"
+            :r="radius"
+            fill="transparent"
+            :stroke="filteredColor[index]"
+            :stroke-width="strokeWidth"
+            :stroke-dasharray="adjustedCircumference"
+            :stroke-dashoffset="calculateStrokeDashOffset(value, circumference)"
+            :transform="returnCircleTransformValue(index)"
+            shape-rendering="optimizeQuality"
+            style="opacity: 0">
+            <animate attributeType="CSS" attributeName="opacity"
+           from="0" to="1" dur="1s" fill="freeze"/>
+          </circle>
+        </no-ssr>
+      </g>
   </svg>
 </template>
 
@@ -40,6 +45,10 @@ export default {
   },
 
   computed: {
+    isServer() {
+      return process.server
+    },
+
     rng() {
       return new Random(this.seed);
     },
