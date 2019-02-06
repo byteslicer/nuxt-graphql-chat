@@ -9,7 +9,7 @@
     "build": "backpack build && nuxt build",
     "start": "cross-env NODE_ENV=production node build/main.js",
     "test": "jest",
-    "heroku-postbuild": "NODE_ENV=production backpack build && nuxt build"
+    "heroku-postbuild": "NODE_ENV=production backpack build && nuxt build && knex migrate:latest"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.14",
