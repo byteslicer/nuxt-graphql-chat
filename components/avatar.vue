@@ -1,25 +1,19 @@
 <template>
   <svg height="32" width="32" viewBox="0 0 160 160">
       <g>
-        <circle :cx="cx" :cy="cy" :r="radius" fill="transparent" stroke="#0c1b27" :stroke-width="strokeWidth" shape-rendering="optimizeQuality"></circle>
-        <no-ssr>
-          <circle v-for="(value, index) in sortedValues"
-            :key="index"
-            :cx="cx"
-            :cy="cy"
-            :r="radius"
-            fill="transparent"
-            :stroke="filteredColor[index]"
-            :stroke-width="strokeWidth"
-            :stroke-dasharray="adjustedCircumference"
-            :stroke-dashoffset="calculateStrokeDashOffset(value, circumference)"
-            :transform="returnCircleTransformValue(index)"
-            shape-rendering="optimizeQuality"
-            style="opacity: 0">
-            <animate attributeType="CSS" attributeName="opacity"
-           from="0" to="1" dur="1s" fill="freeze"/>
-          </circle>
-        </no-ssr>
+        <circle v-for="(circle, index) in circles"
+          :key="index"
+          :cx="cx"
+          :cy="cy"
+          :r="radius"
+          fill="transparent"
+          :stroke="circle.color"
+          :stroke-width="strokeWidth"
+          :stroke-dasharray="circumference"
+          :stroke-dashoffset="circle.strokeDashOffset"
+          :transform="circle.transform"
+          shape-rendering="optimizeQuality">
+        </circle>
       </g>
   </svg>
 </template>
@@ -39,8 +33,7 @@ export default {
       cx: 80,
       cy: 80,
       radius: 60,
-      strokeWidth: 30,
-      angleOffset: -90,
+      strokeWidth: 30
     }
   },
 
@@ -49,26 +42,34 @@ export default {
       return process.server
     },
 
-    rng() {
+    /*rng() {
       return new Random(this.seed);
-    },
+    },*/
 
     circumference() {
       return 2 * Math.PI * this.radius
     },
 
-    sortedValues() {
-      let values = []
-      let x = 1
-      while(x > 0) {
-        let part = Math.min(x, this.rng.number())
-        values.push(part)
-        x -= part
-      }
-      return values
+    circles() {
+      const rng = new Random(this.seed + 'salty')
+      const circumference = this.circumference
+      const sortedValues = this.sortedValues
+      let angleOffset = -90
+
+      return [...this.sortedValues(rng)].map((x, i) => {
+        let resOffset = angleOffset
+        angleOffset = x * 360 + angleOffset
+        let strokeDiff = x * circumference
+        return {
+          percentage: x,
+          transform: `rotate(${resOffset}, ${this.cx}, ${this.cy})`,
+          color: rng.select(this.colorPalette),
+          strokeDashOffset: circumference - strokeDiff
+        }
+      })
     },
 
-    calculateOffset() {
+    /*calculateOffset() {
       var angleOffset = -90
 
       return this.sortedValues.map(x => {
@@ -76,17 +77,13 @@ export default {
         this.angleOffset = x * 360 + this.angleOffset
         return res
       })
-    },
+    },*/
 
-    adjustedCircumference() {
-      return this.circumference - 2
-    },
-
-    colors() {
+    /*colors() {
       return this.sortedValues.map(() => this.rng.select(this.colorPalette))
-    },
+    },*/
 
-    filteredColor() {
+    /*filteredColor() {
       let result = this.colors
 
       for (var i = 1; i < result.length; i++) {
@@ -95,23 +92,27 @@ export default {
         }
       }
       return result
-    }
+    }*/
   },
 
   methods: {
+    * sortedValues(rng) {
+      let x = 1
+      while(x > 0) {
+        let part = Math.min(x, rng.number())
+        yield part
+        x -= part
+      }
+    },
+
     calculateStrokeDashOffset(percentage, circumference) {
       const strokeDiff = percentage * circumference
       return circumference - strokeDiff
-    },
-
-    returnCircleTransformValue(index) {
-      return `rotate(${this.calculateOffset[index]}, ${this.cx}, ${this.cy})`
-    },
+    }
   },
 
   mounted() {
-    this.sortedValues
-    this.calculateOffset
+
   }
 
 }
