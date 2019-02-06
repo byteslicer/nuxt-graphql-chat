@@ -22,6 +22,12 @@
   background-color: #060e14;
 }
 
+@media screen and (max-width: 600px) {
+  .sidebar {
+    display: none;
+  }
+}
+
 .list {
   flex: 1;
   padding: 10px;
@@ -33,6 +39,7 @@
   min-width: 150px;
   padding: 10px 10px;
   background-color: #0c1b27;
+  user-select: none;
 }
 
 .username {
