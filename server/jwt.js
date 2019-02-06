@@ -9,7 +9,7 @@ const signOptions = {
     issuer: "Byteslicer",
     subject:  "admin@byteslicer.de",
     audience:  "http://byteslice.de",
-    expiresIn:  "12h",
+    expiresIn:  "7d",
     algorithm:  "RS256"
 };
 
