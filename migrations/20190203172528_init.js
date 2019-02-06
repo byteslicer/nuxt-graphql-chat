@@ -4,7 +4,7 @@ exports.up = function(knex, Promise) {
       knex.schema.createTable('users', table => {
       table.uuid('id').primary().notNullable()
       table.string('name').unique().notNullable()
-      table.string('password', 64).notNullable()
+      table.string('password', 128).notNullable()
       table.string('salt', 32).notNullable()
       table.datetime('createdAt').defaultTo(knex.fn.now())
     }),
