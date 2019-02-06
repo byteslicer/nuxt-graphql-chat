@@ -53,8 +53,8 @@ module.exports = {
     tokenExpires: 7,
     clientConfigs: {
       default: {
-        httpEndpoint: 'http://192.168.1.194:3000/graphql',
-        wsEndpoint: 'ws://192.168.1.194:3000/graphql'
+        httpEndpoint: process.env.HTTP_ENDPOINT || 'http://192.168.1.194:3000/graphql',
+        wsEndpoint: process.env.WS_ENDPOINT || 'ws://192.168.1.194:3000/graphql'
       }
     },
   }
