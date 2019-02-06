@@ -5,7 +5,7 @@ exports.up = function(knex, Promise) {
       table.uuid('id').primary().notNullable()
       table.string('name').unique().notNullable()
       table.string('password', 128).notNullable()
-      table.string('salt', 32).notNullable()
+      table.string('salt', 64).notNullable()
       table.datetime('createdAt').defaultTo(knex.fn.now())
     }),
 
