@@ -22,7 +22,7 @@
 
 <style scoped>
   .top-line {
-
+    user-select: none;
   }
   .loader {
 

@@ -56,7 +56,8 @@ input.input::placeholder {
   color: rgba(255, 255, 255, 0.2);
 }
 
-[v-cloak] { display: none }
+[v-cloak] > * { display:none }
+[v-cloak]::before { content: "loading…" }
 
 .v--modal {
   background-color: #060e14;

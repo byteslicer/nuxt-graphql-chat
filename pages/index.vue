@@ -1,9 +1,8 @@
 <template>
   <div class="site">
 
-    <Sidebar class="left" :username="me.name"/>
-
-    <div ref="messages" class="messages">
+    <Sidebar class="left" :username="me && me.name"/>
+    <div ref="messages" class="messages" v-chat-scroll="{always: false, smooth: true}">
       <Message v-for="message in messages"
         :key="message.id"
         :author="message.user ? message.user.name : 'UserNotFound'"
@@ -28,7 +27,7 @@
     grid-column-gap: 10px;
     grid-row-gap: 10px;
 
-    box-sizing: border-box;
+    box-sizing: border-box;1
     height: 100vh;
     height: calc(var(--vh, 1vh) * 100);
   }
@@ -38,10 +37,6 @@
       grid-template-areas:
       "content content"
       "input input";
-    }
-
-    .left {
-      display: none;
     }
 
     .chat-input {
@@ -108,15 +103,18 @@ export default {
   },
 
   beforeRouteEnter (to, from, next) {
-    next(vm => {
-      const hasToken = !!vm.$apolloHelpers.getToken()
-      if (!hasToken) {
-        vm.$router.push({ path: 'login' })
-      }
-    })
+    console.log(from)
+    next()
   },
 
   beforeMount() {
+
+    const hasToken = !!this.$apolloHelpers.getToken()
+
+    if (!hasToken) {
+      return { path: '/login' }
+    }
+
     // Calculating vh unit because on mobile 100vh is not 100% of screen size
     let vh = window.innerHeight * 0.01;
     document.documentElement.style.setProperty('--vh', `${vh}px`);
@@ -129,7 +127,33 @@ export default {
   },
 
   mounted() {
+    this.$refs.messages.scrollTop = this.$refs.messages.scrollHeight
 
+    this.$apollo.queries.messages.subscribeToMore({
+      document: gql`subscription {
+        messageAdded {
+          id
+          user {
+            id
+            name
+          }
+          content
+          createdAt
+        }
+      }`,
+      updateQuery(previousResult, { subscriptionData }) {
+
+        const sound = new Audio('plop.mp3')
+        sound.play().catch(err => {})
+
+        return {
+          messages: [
+            ...previousResult.messages,
+            subscriptionData.data.messageAdded
+          ]
+        }
+      }
+    })
   },
 
   methods: {
@@ -167,26 +191,22 @@ export default {
           data.messages.push(addMessage)
           // Write our data back to the cache.
           store.writeQuery({ query: MESSAGE_QUERY, data })
-
-
-          this.$refs.messages.scrollTop = this.$refs.messages.scrollHeight;
         },
 
         optimisticResponse: {
-        __typename: 'Mutation',
-        addMessage: {
-          __typename: 'Message',
-          id: -1,
-          user: {
-            __typename: 'User',
+          __typename: 'Mutation',
+          addMessage: {
+            __typename: 'Message',
             id: -1,
-            name: this.me.name
+            user: {
+              __typename: 'User',
+              id: -1,
+              name: this.me.name
+            },
+            content: message,
+            createdAt: moment().format()
           },
-          content: message,
-          createdAt: moment().format()
         },
-      },
-
       })
       .catch((error) => {
         console.error(error)
@@ -203,32 +223,11 @@ export default {
           name
         }
       }`,
-      prefetch: false,
+      prefetch: true,
     },
     messages: {
       query: MESSAGE_QUERY,
-      prefetch: false,
-      subscribeToMore: {
-        document: gql`subscription {
-          messageAdded {
-            id
-            user {
-              id
-              name
-            }
-            content
-            createdAt
-          }
-        }`,
-        updateQuery: (previousResult, { subscriptionData }) => {
-          return {
-            messages: [
-              ...previousResult.messages,
-              subscriptionData.data.messageAdded
-            ]
-          }
-        }
-      }
+      prefetch: true
     }
   }
 }

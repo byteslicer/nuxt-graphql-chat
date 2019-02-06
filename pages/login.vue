@@ -1,10 +1,14 @@
 <template>
   <div class="wrapper">
-    <form class="login" @submit.prevent="handleSubmit">
-      <input class="input" type="text" placeholder="Username" v-model="username" />
-      <input class="input" type="password" placeholder="Password" v-model="password" />
-      <button type="submit" class="button">Login</button>
-    </form>
+    <div class="login">
+      <no-ssr>
+      <form v-cloak action="" @submit.prevent="handleSubmit">
+        <input class="input" type="text" placeholder="Username" autocomplete="username" v-model="username" />
+        <input class="input" type="password" placeholder="Password" autocomplete="current-password" v-model="password" />
+        <button type="submit" class="button">Login</button>
+      </form>
+      </no-ssr>
+    </div>
   </div>
 </template>
 
@@ -17,8 +21,9 @@
   }
 
   .login {
-    box-sizing: border-box;
-    max-width: 50%;
+    flex: 1;
+    padding: 10px;
+    max-width: 300px;
   }
 
   .button {
@@ -36,7 +41,8 @@
 
   .input {
     height: 37px;
-    width: 200px;
+    width: 100%;
+    box-sizing: border-box;
     display: block;
     margin-bottom: 10px;
     border: 1px solid #28608a;
@@ -49,19 +55,18 @@
 import gql from 'graphql-tag';
 
 export default {
-  beforeRouteEnter (to, from, next) {
-    next(vm => {
-      const hasToken = !!vm.$apolloHelpers.getToken()
-      if (hasToken) {
-        vm.$router.push({ path: 'login' })
-      }
-    })
-  },
-
   data() {
     return {
       username: "",
       password: ""
+    }
+  },
+
+  beforeMount() {
+    const hasToken = !!this.$apolloHelpers.getToken()
+
+    if (hasToken) {
+      return { path: '/' }
     }
   },
 
