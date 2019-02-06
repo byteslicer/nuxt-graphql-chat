@@ -1,7 +1,10 @@
+const hooks = require('./hooks')
 const pkg = require('./package')
 
 module.exports = {
   mode: 'universal',
+
+  hooks: hooks(this),
 
   /*
   ** Headers of the page
@@ -23,7 +26,9 @@ module.exports = {
     '@/assets/css/main.css'
   ],
 
-  plugins: [],
+  plugins: [
+    '@/plugins/vue-chat-scroll.client.js'
+  ],
 
   /*
   ** Nuxt.js modules
@@ -44,6 +49,7 @@ module.exports = {
 
   apollo: {
     includeNodeModules: true,
+    tokenExpires: 7,
     clientConfigs: {
       default: {
         httpEndpoint: 'http://192.168.1.194:3000/graphql',
