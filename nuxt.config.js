@@ -3,6 +3,7 @@ const pkg = require('./package')
 
 module.exports = {
   mode: 'universal',
+  dev: (process.env.NODE_ENV !== 'production'),
 
   hooks: hooks(this),
 
@@ -41,7 +42,7 @@ module.exports = {
         //import whole set
         {
           set: '@fortawesome/free-solid-svg-icons',
-          icons: ['fas']
+          icons: ['faCog', 'faEdit']
         }
       ]
     }]

@@ -7,12 +7,10 @@ module.exports = nuxtConfig => {
     setupMiddleware(app) {
       app.use((req, res, next) => {
         if (req.path == '/') {
-          console.log(req.path)
           const cookie = req.get('cookie')
           if(cookie && cookie.match(/apollo-token/)) {
             next()
           } else {
-            console.log(req.originalUrl)
             res.redirect('/login')
           }
         } else {

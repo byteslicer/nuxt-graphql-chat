@@ -27,7 +27,7 @@
     grid-column-gap: 10px;
     grid-row-gap: 10px;
 
-    box-sizing: border-box;1
+    box-sizing: border-box;
     height: 100vh;
     height: calc(var(--vh, 1vh) * 100);
   }
@@ -103,7 +103,6 @@ export default {
   },
 
   beforeRouteEnter (to, from, next) {
-    console.log(from)
     next()
   },
 

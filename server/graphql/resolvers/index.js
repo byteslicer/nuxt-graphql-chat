@@ -4,8 +4,8 @@ const uuidv4 = require('uuid/v4');
 const { PubSub, ForbiddenError, AuthenticationError } = require('apollo-server-express');
 const { withFilter } = require('graphql-subscriptions');
 
-const db = require('../server/db')
-const jwt = require('../server/jwt')
+const db = require('~/server/db')
+const jwt = require('~/server/jwt')
 const pubsub = new PubSub();
 
 const MESSAGE_ADDED = 'MESSAGE_ADDED';
@@ -20,7 +20,7 @@ export default {
     messageAdded: {
       // Additional event labels can be passed to asyncIterator creation
       subscribe: withFilter(() => pubsub.asyncIterator([MESSAGE_ADDED]), (payload, variables, context, info) => {
-        console.log("withFilter", payload)
+        //console.log("withFilter", payload)
         return payload.messageAdded.user.id !== context.user.id
       })
     },
@@ -41,7 +41,7 @@ export default {
         'users.name as username'
       ]).leftJoin('users', 'messages.userId', 'users.id')
 
-      console.log("messages", messages)
+      //console.log("messages", messages)
       return messages.map(x => {
         return {
           id: x.id,
@@ -114,7 +114,7 @@ export default {
         createdAt: moment().format()
       }
 
-      console.log("addMessage", user)
+      //console.log("addMessage", user)
 
       pubsub.publish(MESSAGE_ADDED, { messageAdded: message })
 

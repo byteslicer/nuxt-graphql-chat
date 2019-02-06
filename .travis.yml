@@ -1,0 +1,14 @@
+language: node_js
+node_js:
+  - "node"
+
+services:
+  - postgres
+
+env:
+  - NODE_ENV=staging
+
+before_script:
+  - npx knex migrate:latest
+  - npm run build
+  
