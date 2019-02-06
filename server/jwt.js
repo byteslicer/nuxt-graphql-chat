@@ -2,8 +2,8 @@ const fs   = require('fs');
 const jwt  = require('jsonwebtoken');
 
 // use 'utf8' to get string instead of byte array  (512 bit key)
-const privateKey  = fs.readFileSync('./data/private.key', 'utf8');
-const publicKey  = fs.readFileSync('./data/public.key', 'utf8');
+const privateKey  = process.env.PRIVATE_KEY || fs.readFileSync('./data/private.key', 'utf8');
+const publicKey  = process.env.PUBLIC_KEY || fs.readFileSync('./data/public.key', 'utf8');
 
 const signOptions = {
     issuer: "Byteslicer",
