@@ -3,7 +3,7 @@ node_js:
   - "node"
 
 services:
-  - postgres
+  - postgresql
 
 env:
   - NODE_ENV=staging
@@ -11,4 +11,3 @@ env:
 before_script:
   - npx knex migrate:latest
   - npm run build
-  
