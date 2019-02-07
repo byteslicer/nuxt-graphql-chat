@@ -1,7 +1,7 @@
 <template>
   <form class="chat-control" @submit.prevent="handleSubmit">
     <button type="submit" class="button">SEND</button>
-    <input :value="value" @input="handleInput" class="input" type="text" />
+    <input :value="value" @input="handleInput" class="input" type="text" autofocus/>
   </form>
 </template>
 
