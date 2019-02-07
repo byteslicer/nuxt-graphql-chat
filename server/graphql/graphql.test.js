@@ -5,6 +5,10 @@ import gql from 'graphql-tag'
 import db from '~/server/db'
 import graphql from './index'
 
+jest.mock('~/server/jwt', () => {
+  return {}
+});
+
 it('should fetch messages', async (done) => {
 
   const server = new ApolloServer({
