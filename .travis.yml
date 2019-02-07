@@ -6,7 +6,7 @@ services:
   - postgresql
 
 env:
-  - NODE_ENV=staging
+  - NODE_ENV=test
 
 before_script:
   - npx knex migrate:latest
