@@ -47,7 +47,7 @@ export default {
           id: x.id,
           user: { id: x.userId, name: x.username },
           content: x.content,
-          createdAt: x.createdAt
+          createdAt: moment(x.createdAt).format()
         }
       })
     },
