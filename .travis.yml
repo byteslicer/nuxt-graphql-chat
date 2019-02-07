@@ -9,5 +9,6 @@ env:
   - NODE_ENV=test
 
 before_script:
+  - psql -c 'create database travis_ci_test;' -U postgres
   - npx knex migrate:latest
   - npm run build
