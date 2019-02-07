@@ -2,11 +2,11 @@
   <div class="wrapper">
     <div class="login">
       <no-ssr>
-      <form v-cloak action="" @submit.prevent="handleSubmit">
-        <input class="input" type="text" placeholder="Username" autocomplete="username" v-model="username" />
-        <input class="input" type="password" placeholder="Password" autocomplete="current-password" v-model="password" />
-        <button type="submit" class="button">Login</button>
-      </form>
+        <form v-cloak action="" @submit.prevent="handleSubmit">
+          <input class="input" type="text" placeholder="Username" autocomplete="username" v-model="username" />
+          <input class="input" type="password" placeholder="Password" autocomplete="current-password" v-model="password" />
+          <button type="submit" class="button">Login</button>
+        </form>
       </no-ssr>
     </div>
   </div>
@@ -35,7 +35,6 @@
     width: 60px;
     border: 1px solid #28608a;
     border-radius: 5px;
-
     width: 100%;
   }
 
@@ -49,6 +48,7 @@
     border-radius: 5px;
 
   }
+
 </style>
 
 <script>
