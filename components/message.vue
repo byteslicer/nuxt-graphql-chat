@@ -2,7 +2,7 @@
   <article class="media">
     <figure class="media-left">
       <p class="image">
-        <avatar :seed="author"></avatar>
+        <avatar width="30" height="30" :seed="author" :epsilon="0.1" :max-divisions="2"></avatar>
       </p>
     </figure>
     <div class="media-content">
@@ -74,7 +74,7 @@
 import moment from 'moment'
 
 import loader from '@/components/small-loader'
-import avatar from '@/components/avatar'
+import avatar from 'vue-random-avatar'
 
 export default {
   components: { avatar, loader },
