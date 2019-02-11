@@ -3,9 +3,12 @@
     <div class="login">
       <no-ssr>
         <form v-cloak action="" @submit.prevent="handleSubmit">
-          <input class="input" type="text" placeholder="Username" autocomplete="username" v-model="username" />
+          <input class="input" type="text" placeholder="Username" autocomplete="username" v-model="username" autofocus/>
           <input class="input" type="password" placeholder="Password" autocomplete="current-password" v-model="password" />
           <button type="submit" class="button">Signup</button>
+          <div class="subtext">
+            Already have an account? <nuxt-link class="login-link" to="/login">Log In</nuxt-link>
+          </div>
         </form>
       </no-ssr>
     </div>
@@ -38,6 +41,10 @@
     width: 100%;
   }
 
+  .button:hover {
+    background: #28608a;
+  }
+
   .input {
     height: 37px;
     width: 100%;
@@ -47,6 +54,22 @@
     border: 1px solid #28608a;
     border-radius: 5px;
 
+  }
+
+  .subtext {
+    padding: 5px;
+    font-weight: lighter;
+    text-align: center;
+  }
+
+  .login-link {
+    padding-left: 4px;
+    font-weight: bold;
+    text-decoration: none;
+  }
+
+  .signup-link:hover {
+    color: #89b8dc;
   }
 
 </style>
