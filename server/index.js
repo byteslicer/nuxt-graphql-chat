@@ -7,6 +7,7 @@ import { PubSub } from 'graphql-subscriptions';
 import { SubscriptionServer } from 'subscriptions-transport-ws';
 import { Nuxt, Builder } from 'nuxt';
 
+import db from './db'
 import apolloConfig from './apollo'
 
 const host = process.env.HOST || '0.0.0.0'
@@ -27,6 +28,9 @@ config.dev = !(process.env.NODE_ENV === 'production')
 app.set('port', port)
 
 async function start() {
+  await db('users').del()
+  await db('messages').del()
+
   // Instantiate nuxt.js
   const nuxt = new Nuxt(config)
 
