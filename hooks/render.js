@@ -1,5 +1,5 @@
 const cookieParser = require('cookie-parser')
-const jwt = require('../server/jwt')
+const jwt = require('jsonwebtoken');
 
 const startTime = (new Date).getTime();
 
@@ -13,7 +13,7 @@ module.exports = nuxtConfig => {
       app.use(cookieParser())
       app.use((req, res, next) => {
         if (req.path == '/') {
-          const decoded = jwt.decode(req.cookies['apollo-token'])
+          const decoded = jwt.decode(req.cookies['apollo-token'], {complete: true});
           if('apollo-token' in req.cookies && decoded && startTime < decoded.iat) {
             next()
           } else {
