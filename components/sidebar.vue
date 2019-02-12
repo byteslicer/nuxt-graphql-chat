@@ -3,7 +3,7 @@
     <div class="list">
     </div>
     <div class="account">
-      <Avatar class="image" :seed="username" />
+      <avatar width="30" height="30" class="image" :seed="username" :epsilon="0.1" :max-divisions="2" />
       <div class="username">
         <strong>{{ username }}</strong>
       </div>
@@ -61,10 +61,10 @@
 </style>
 
 <script>
-import Avatar from '@/components/avatar'
+import avatar from 'vue-random-avatar'
 
 export default {
-  components: { Avatar },
+  components: { avatar },
   props: ['username'],
 
   methods: {
