@@ -1,7 +1,7 @@
 const cookieParser = require('cookie-parser')
 const jwt = require('jsonwebtoken');
 
-const startTime = (new Date).getTime();
+const startTime = Math.round((new Date).getTime() / 1000);
 
 module.exports = nuxtConfig => {
   return {
@@ -12,18 +12,24 @@ module.exports = nuxtConfig => {
     setupMiddleware(app) {
       app.use(cookieParser())
       app.use((req, res, next) => {
-        if (req.path == '/') {
+        if (req.path == '/' || req.path == '/login' || req.path == '/signup' ) {
           const decoded = jwt.decode(req.cookies['apollo-token'], {complete: true});
-          if('apollo-token' in req.cookies && decoded && startTime < decoded.iat) {
+          if('apollo-token' in req.cookies && decoded && startTime < decoded.payload.iat) {
             next()
           } else {
+            //console.log(decoded, startTime, decoded && decoded.payload.iat - startTime)
+
             res.clearCookie('apollo-token', { path: '/' });
-            res.redirect('/login')
+
+            if(req.path != '/login' && req.path != '/signup') {
+              res.redirect('/login')
+            } else {
+              next()
+            }
           }
         } else {
           next()
         }
-
       })
     }
   }
