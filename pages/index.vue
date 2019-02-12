@@ -103,17 +103,16 @@ export default {
   },
 
   beforeRouteEnter (to, from, next) {
-    next()
+    next(vm => {
+      const hasToken = !!vm.$apolloHelpers.getToken()
+
+      if (!hasToken) {
+        next({ path: '/login' })
+      }
+    })
   },
 
   beforeMount() {
-
-    const hasToken = !!this.$apolloHelpers.getToken()
-
-    if (!hasToken) {
-      return { path: '/login' }
-    }
-
     // Calculating vh unit because on mobile 100vh is not 100% of screen size
     let vh = window.innerHeight * 0.01;
     document.documentElement.style.setProperty('--vh', `${vh}px`);

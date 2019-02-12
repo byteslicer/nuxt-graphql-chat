@@ -85,12 +85,14 @@ export default {
     }
   },
 
-  beforeMount() {
-    const hasToken = !!this.$apolloHelpers.getToken()
+  beforeRouteEnter (to, from, next) {
+    next(vm => {
+      const hasToken = !!vm.$apolloHelpers.getToken()
 
-    if (hasToken) {
-      return { path: '/' }
-    }
+      if (hasToken) {
+        next({ path: '/' })
+      }
+    })
   },
 
   methods: {
