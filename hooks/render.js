@@ -1,5 +1,5 @@
 const cookieParser = require('cookie-parser')
-const jwt = require('~/server/jwt')
+const jwt = require('../server/jwt')
 
 const startTime = (new Date).getTime();
 
