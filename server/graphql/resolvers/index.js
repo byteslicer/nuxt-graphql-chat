@@ -58,6 +58,11 @@ export default {
         throw new ForbiddenError('Already logged in')
       }
 
+      let exists = await db('users').first('id').where('name', args.username)
+      if(exists) {
+        throw new ForbiddenError('Username already exists!')
+      }
+
       let salt = crypto.randomBytes(32).toString('hex');
       let passwordHash = await pbkdf2(args.password, salt)
 
