@@ -1,16 +1,17 @@
 <template>
   <div class="site">
-
-    <Sidebar class="left" :username="me && me.name"/>
-    <div ref="messages" class="messages" v-chat-scroll="{always: false, smooth: true}">
-      <Message v-for="message in messages"
+    <Sidebar class="left" :username="me && me.name" />
+    <div ref="messages" v-chat-scroll="{always: false, smooth: true}" class="messages">
+      <Message
+        v-for="message in messages"
         :key="message.id"
         :author="message.user ? message.user.name : 'UserNotFound'"
         :message="message.content"
         :time="message.createdAt"
-        :loading="message.id === -1" />
+        :loading="message.id === -1"
+      />
     </div>
-    <ChatInput class="chat-input" v-model="chatInput" @submit="addMessage" />
+    <ChatInput v-model="chatInput" class="chat-input" @submit="addMessage" />
   </div>
 </template>
 
@@ -74,12 +75,12 @@
 </style>
 
 <script>
-import moment from 'moment'
+import moment from 'moment';
 
 import gql from 'graphql-tag';
-import Sidebar from '@/components/sidebar'
-import ChatInput from '@/components/chat-input'
-import Message from '@/components/message'
+import Sidebar from '@/components/sidebar';
+import ChatInput from '@/components/chat-input';
+import Message from '@/components/message';
 
 const MESSAGE_QUERY = gql`{
   messages {
@@ -91,25 +92,25 @@ const MESSAGE_QUERY = gql`{
     content
     createdAt
  }
-}`
+}`;
 
 export default {
   components: { Message, ChatInput, Sidebar },
   data() {
     return {
       me: { name: '' },
-      chatInput: ""
-    }
+      chatInput: '',
+    };
   },
 
-  beforeRouteEnter (to, from, next) {
-    next(vm => {
-      const hasToken = !!vm.$apolloHelpers.getToken()
+  beforeRouteEnter(to, from, next) {
+    next((vm) => {
+      const hasToken = !!vm.$apolloHelpers.getToken();
 
       if (!hasToken) {
-        next({ path: '/login' })
+        next({ path: '/login' });
       }
-    })
+    });
   },
 
   beforeMount() {
@@ -119,13 +120,13 @@ export default {
 
     window.addEventListener('resize', () => {
       // We execute the same script as before
-      let vh = window.innerHeight * 0.01;
+      vh = window.innerHeight * 0.01;
       document.documentElement.style.setProperty('--vh', `${vh}px`);
     });
   },
 
   mounted() {
-    this.$refs.messages.scrollTop = this.$refs.messages.scrollHeight
+    this.$refs.messages.scrollTop = this.$refs.messages.scrollHeight;
 
     this.$apollo.queries.messages.subscribeToMore({
       document: gql`subscription {
@@ -140,26 +141,25 @@ export default {
         }
       }`,
       updateQuery(previousResult, { subscriptionData }) {
-
-        const sound = new Audio('plop.mp3')
-        sound.play().catch(err => {})
+        const sound = new Audio('plop.mp3');
+        sound.play().catch(() => {});
 
         return {
           messages: [
             ...previousResult.messages,
-            subscriptionData.data.messageAdded
-          ]
-        }
-      }
-    })
+            subscriptionData.data.messageAdded,
+          ],
+        };
+      },
+    });
   },
 
   methods: {
     addMessage() {
       if (this.chatInput.length <= 0) return;
 
-      const message = this.chatInput
-      this.chatInput = ''
+      const message = this.chatInput;
+      this.chatInput = '';
 
       this.$apollo.mutate({
         mutation: gql`
@@ -176,7 +176,7 @@ export default {
           }
         `,
         variables: {
-          content: message
+          content: message,
         },
 
         // Update the cache with the result
@@ -184,11 +184,11 @@ export default {
         // and then with the real result of the mutation
         update: (store, { data: { addMessage } }) => {
           // Read the data from our cache for this query.
-          const data = store.readQuery({ query: MESSAGE_QUERY })
+          const data = store.readQuery({ query: MESSAGE_QUERY });
           // Add our tag from the mutation to the end
-          data.messages.push(addMessage)
+          data.messages.push(addMessage);
           // Write our data back to the cache.
-          store.writeQuery({ query: MESSAGE_QUERY, data })
+          store.writeQuery({ query: MESSAGE_QUERY, data });
         },
 
         optimisticResponse: {
@@ -199,18 +199,16 @@ export default {
             user: {
               __typename: 'User',
               id: -1,
-              name: this.me.name
+              name: this.me.name,
             },
             content: message,
-            createdAt: moment().format()
+            createdAt: moment().format(),
           },
         },
-      })
-      .catch((error) => {
-        console.error(error)
-        this.chatInput = message
-      })
-    }
+      }).catch(() => {
+        this.chatInput = message;
+      });
+    },
   },
 
   apollo: {
@@ -225,8 +223,8 @@ export default {
     },
     messages: {
       query: MESSAGE_QUERY,
-      prefetch: true
-    }
-  }
-}
+      prefetch: true,
+    },
+  },
+};
 </script>
