@@ -3,12 +3,30 @@
     <div class="login">
       <no-ssr>
         <alert :message="error" level="error" />
-        <form class="form" v-cloak action="" @submit.prevent="handleSubmit">
-          <input class="input" type="text" placeholder="Username" autocomplete="username" v-model="username" autofocus/>
-          <input class="input" type="password" placeholder="Password" autocomplete="current-password" v-model="password" />
-          <button type="submit" class="button">Signup</button>
+        <form class="form" action="" @submit.prevent="handleSubmit">
+          <input
+            v-model="username"
+            class="input"
+            type="text"
+            placeholder="Username"
+            autocomplete="username"
+            autofocus
+          >
+          <input
+            v-model="password"
+            class="input"
+            type="password"
+            placeholder="Password"
+            autocomplete="new-password"
+          >
+          <button type="submit" class="button">
+            Register
+          </button>
           <div class="subtext">
-            Already have an account? <nuxt-link class="login-link" to="/login">Log In</nuxt-link>
+            Already have an account?
+            <nuxt-link class="login-link" to="/login">
+              Log In
+            </nuxt-link>
           </div>
         </form>
       </no-ssr>
@@ -87,45 +105,44 @@ export default {
   components: { alert },
   data() {
     return {
-      username: "",
-      password: "",
-      error: ""
-    }
+      username: '',
+      password: '',
+      error: '',
+    };
   },
 
-  beforeRouteEnter (to, from, next) {
-    next(vm => {
-      const hasToken = !!vm.$apolloHelpers.getToken()
+  beforeRouteEnter(to, from, next) {
+    next((vm) => {
+      const hasToken = !!vm.$apolloHelpers.getToken();
 
       if (hasToken) {
-        next({ path: '/' })
+        next({ path: '/' });
       }
-    })
+    });
   },
 
   methods: {
     async handleSubmit() {
-      const username = this.username
-      const password = this.password
-      this.password = ''
+      const { username, password } = this;
+      this.password = '';
 
       const res = await this.$apollo.mutate({
-          mutation: gql`mutation($username: String!, $password: String!) {
-            signup(username: $username, password: $password)
-          }`,
-          variables: { username, password },
-          errorPolicy: 'all'
-      })
+        mutation: gql`mutation($username: String!, $password: String!) {
+          signup(username: $username, password: $password)
+        }`,
+        variables: { username, password },
+        errorPolicy: 'all',
+      });
 
-      if(res.errors) {
-        this.error = res.errors[0].message
+      if (res.errors) {
+        this.error = res.errors[0].message;
       } else {
-        this.error = ""
-        await this.$apolloHelpers.onLogin(res.data.signup)
-        this.$router.push({ path: '/' })
+        this.error = '';
+        await this.$apolloHelpers.onLogin(res.data.signup);
+        this.$router.push({ path: '/' });
       }
-    }
-  }
-}
+    },
+  },
+};
 
 </script>
