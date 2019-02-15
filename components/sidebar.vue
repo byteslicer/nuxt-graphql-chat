@@ -1,9 +1,15 @@
 <template>
   <div class="sidebar">
-    <div class="list">
-    </div>
+    <div class="list" />
     <div class="account">
-      <avatar width="30" height="30" class="image" :seed="username" :epsilon="0.1" :max-divisions="2" />
+      <avatar
+        width="30"
+        height="30"
+        class="image"
+        :seed="username"
+        :epsilon="0.1"
+        :max-divisions="2"
+      />
       <div class="username">
         <strong>{{ username }}</strong>
       </div>
@@ -56,22 +62,22 @@
   color: #89b8dc;
 }
 
-
-
 </style>
 
 <script>
-import avatar from 'vue-random-avatar'
+import avatar from 'vue-random-avatar';
 
 export default {
   components: { avatar },
-  props: ['username'],
+  props: {
+    username: { type: String, default: '' },
+  },
 
   methods: {
     handleEdit() {
       this.$modal.show('edit');
-    }
-  }
-}
+    },
+  },
+};
 
 </script>
