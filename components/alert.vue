@@ -1,7 +1,9 @@
 <template>
   <div>
     <transition enter-active-class="animated headShake" leave-active-class="animated fadeOut">
-      <div v-if="message" class="alert">{{ message }}</div>
+      <div v-if="message" class="alert">
+        {{ message }}
+      </div>
     </transition>
   </div>
 </template>
@@ -20,7 +22,9 @@
 <script>
 
 export default {
-  props: ['message', 'level']
-}
-
+  props: {
+    message: { type: String, default: '' },
+    level: { type: String, default: 'error' },
+  },
+};
 </script>
