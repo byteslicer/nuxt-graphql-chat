@@ -1,22 +1,30 @@
 <template>
   <article class="media">
     <figure class="media-left">
-      <p class="image">
-        <avatar width="30" height="30" :seed="author" :epsilon="0.1" :max-divisions="2"></avatar>
-      </p>
+      <avatar
+        width="30"
+        height="30"
+        :seed="author"
+        :epsilon="0.1"
+        :max-divisions="2"
+      />
     </figure>
     <div class="media-content">
       <div class="content">
         <div class="top-line">
-          <div class="name"><strong>{{ this.author }}</strong></div>
-          <div class="time"><small>{{ this.time | fromNow }}</small></div>
+          <div class="name">
+            <strong>{{ author }}</strong>
+          </div>
+          <div class="time">
+            <small>{{ time | fromNow }}</small>
+          </div>
         </div>
         <p class="message-box">
-          {{ this.message }}
+          {{ message }}
         </p>
       </div>
     </div>
-    <loader v-if="loading && timeout" class="loader" />
+    <img v-if="loading && timeout" class="loader" src="loader.svg">
   </article>
 </template>
 
@@ -57,7 +65,7 @@
     }
   }
 
-  .image {
+  .media-left {
     padding: 0 10px;
   }
 
@@ -71,34 +79,36 @@
 </style>
 
 <script>
-import moment from 'moment'
-
-import loader from '@/components/small-loader'
-import avatar from 'vue-random-avatar'
+import moment from 'moment';
+import avatar from 'vue-random-avatar';
 
 export default {
-  components: { avatar, loader },
-  props: ['author', 'message', 'time', 'loading'],
+  components: { avatar },
+
+  filters: {
+    fromNow(date) {
+      return moment(date).calendar();
+    },
+  },
+  props: {
+    author: { type: String, default: '' },
+    message: { type: String, default: '' },
+    time: { type: Object, default: null },
+    loading: { type: Boolean, default: false },
+  },
 
   data() {
     return {
-      timeout: false
-    }
+      timeout: false,
+    };
   },
 
   mounted() {
-    if(this.loading) {
+    if (this.loading) {
       setTimeout(() => {
-       this.timeout = true
-      }, 100)
+        this.timeout = true;
+      }, 100);
     }
   },
-
-  filters: {
-    fromNow: function (date) {
-      return moment(date).calendar()
-    }
-  }
-}
-
+};
 </script>
