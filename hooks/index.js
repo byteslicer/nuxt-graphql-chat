@@ -1,5 +1,5 @@
-const render = require('./render')
+const render = require('./render');
 
 module.exports = nuxtConfig => ({
-  render: render(nuxtConfig)
-})
+  render: render(nuxtConfig),
+});
