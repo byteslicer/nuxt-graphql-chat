@@ -3,12 +3,30 @@
     <div class="login">
       <no-ssr>
         <alert :message="error" level="error" />
-        <form class="form" v-cloak action="" @submit.prevent="handleSubmit">
-          <input class="input" type="text" placeholder="Username" autocomplete="username" v-model="username" autofocus/>
-          <input class="input" type="password" placeholder="Password" autocomplete="current-password" v-model="password" />
-          <button type="submit" class="button">Login</button>
+        <form class="form" action="" @submit.prevent="handleSubmit">
+          <input
+            v-model="username"
+            class="input"
+            type="text"
+            placeholder="Username"
+            autocomplete="username"
+            autofocus
+          >
+          <input
+            v-model="password"
+            class="input"
+            type="password"
+            placeholder="Password"
+            autocomplete="current-password"
+          >
+          <button type="submit" class="button">
+            Login
+          </button>
           <div class="subtext">
-            Don´t have an account? <nuxt-link class="signup-link" to="/signup">Sign Up</nuxt-link>
+            Don´t have an account?
+            <nuxt-link class="signup-link" to="/signup">
+              Sign Up
+            </nuxt-link>
           </div>
         </form>
       </no-ssr>
@@ -80,51 +98,49 @@
 
 <script>
 import gql from 'graphql-tag';
-import alert from '@/components/alert'
+import alert from '@/components/alert';
 
 export default {
   components: { alert },
   data() {
     return {
-      username: "",
-      password: "",
-      error: ""
-    }
+      username: '',
+      password: '',
+      error: '',
+    };
   },
 
-  beforeRouteEnter (to, from, next) {
-    next(vm => {
-      const hasToken = !!vm.$apolloHelpers.getToken()
+  beforeRouteEnter(to, from, next) {
+    next((vm) => {
+      const hasToken = !!vm.$apolloHelpers.getToken();
 
       if (hasToken) {
-        next({ path: '/' })
+        next({ path: '/' });
       }
-    })
+    });
   },
 
   methods: {
     async handleSubmit() {
-      const username = this.username
-      const password = this.password
-      this.password = ''
+      const { username, password } = this;
+      this.password = '';
 
       const res = await this.$apollo.mutate({
-          mutation: gql`mutation($username: String!, $password: String!) {
-            login(username: $username, password: $password)
-          }`,
-          variables: { username, password },
-          errorPolicy: 'all'
-      })
+        mutation: gql`mutation($username: String!, $password: String!) {
+          login(username: $username, password: $password)
+        }`,
+        variables: { username, password },
+        errorPolicy: 'all',
+      });
 
-      if(res.errors) {
-        this.error = res.errors[0].message
+      if (res.errors) {
+        this.error = res.errors[0].message;
       } else {
-        this.error = ""
-        await this.$apolloHelpers.onLogin(res.data.login)
-        this.$router.push({ path: '/' })
+        this.error = '';
+        await this.$apolloHelpers.onLogin(res.data.login);
+        this.$router.push({ path: '/' });
       }
-    }
-  }
-}
-
+    },
+  },
+};
 </script>
