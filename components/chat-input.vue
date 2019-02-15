@@ -1,7 +1,9 @@
 <template>
   <form class="chat-control" @submit.prevent="handleSubmit">
-    <button type="submit" class="button">SEND</button>
-    <input :value="value" @input="handleInput" class="input" type="text" autofocus/>
+    <button type="submit" class="button">
+      SEND
+    </button>
+    <input autofocus class="input" type="text" :value="value" @input="handleInput">
   </form>
 </template>
 
@@ -51,17 +53,19 @@
 <script>
 
 export default {
-  props: ['value'],
+  props: {
+    value: { type: String, default: '' },
+  },
 
   methods: {
-    handleInput (e) {
-      this.$emit('input', e.target.value)
+    handleInput(e) {
+      this.$emit('input', e.target.value);
     },
 
-    handleSubmit(e) {
-      this.$emit('submit')
-    }
-  }
-}
+    handleSubmit() {
+      this.$emit('submit');
+    },
+  },
+};
 
 </script>
