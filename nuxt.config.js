@@ -1,5 +1,10 @@
+/* eslint-disable */
+const GitRevisionPlugin = require('git-revision-webpack-plugin');
+
 const hooks = require('./hooks')
 const pkg = require('./package')
+
+const gitRevisionPlugin = new GitRevisionPlugin();
 
 module.exports = {
   mode: 'universal',
@@ -59,5 +64,9 @@ module.exports = {
         wsEndpoint: process.env.WS_ENDPOINT || 'ws://192.168.1.194:3000/graphql'
       }
     },
+  },
+
+  env: {
+    VERSION: JSON.stringify(gitRevisionPlugin.version())
   }
 }

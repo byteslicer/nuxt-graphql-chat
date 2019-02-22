@@ -7,6 +7,7 @@ Sentry.init({
     new Sentry.Integrations.Vue({
       Vue,
       attachProps: true,
+      release: process.env.VERSION,
     }),
   ],
 });
