@@ -21,6 +21,7 @@
     "apollo-server-express": "^2.4.0",
     "backpack-core": "^0.8.3",
     "body-parser": "^1.18.3",
+    "consola": "^2.4.1",
     "cookie-parser": "^1.4.4",
     "core-js": "^2.6.4",
     "cross-env": "^5.2.0",
@@ -52,6 +53,7 @@
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-import-resolver-alias": "^1.1.2",
     "eslint-plugin-import": "^2.16.0",
+    "eslint-plugin-jest": "^22.3.0",
     "eslint-plugin-vue": "^5.2.1",
     "jest": "^24.1.0",
     "vue-jest": "^3.0.3"
