@@ -1,10 +1,6 @@
 /* eslint-disable */
-const GitRevisionPlugin = require('git-revision-webpack-plugin');
-
 const hooks = require('./hooks')
 const pkg = require('./package')
-
-const gitRevisionPlugin = new GitRevisionPlugin();
 
 module.exports = {
   mode: 'universal',
@@ -65,8 +61,4 @@ module.exports = {
       }
     },
   },
-
-  env: {
-    VERSION: JSON.stringify(gitRevisionPlugin.version())
-  }
 }
