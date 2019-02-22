@@ -29,6 +29,7 @@ module.exports = {
   ],
 
   plugins: [
+    '@/plugins/sentry.client.js',
     '@/plugins/vue-chat-scroll.client.js'
   ],
 
