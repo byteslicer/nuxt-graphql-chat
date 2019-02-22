@@ -4,8 +4,8 @@ import http from 'http';
 import { Nuxt, Builder } from 'nuxt';
 import consola from 'consola';
 
-import db from './db'
-import apolloConfig from './apollo'
+import db from './db';
+import apolloConfig from './apollo';
 
 const host = process.env.HOST || '0.0.0.0';
 const port = process.env.PORT || 3000;
@@ -26,8 +26,8 @@ config.dev = !(process.env.NODE_ENV === 'production');
 app.set('port', port);
 
 async function start() {
-  await db('users').del()
-  await db('messages').del()
+  await db('users').del();
+  await db('messages').del();
 
   // Instantiate nuxt.js
   const nuxt = new Nuxt(config);
