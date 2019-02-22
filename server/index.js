@@ -10,8 +10,6 @@ import apolloConfig from './apollo';
 const host = process.env.HOST || '0.0.0.0';
 const port = process.env.PORT || 3000;
 
-console.log('Version:', process.env.SOURCE_VERSION); // eslint-disable-line no-console
-
 const server = new ApolloServer(apolloConfig);
 
 const app = express();

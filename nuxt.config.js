@@ -61,4 +61,8 @@ module.exports = {
       }
     },
   },
+
+  env: {
+    SOURCE_VERSION: process.env.SOURCE_VERSION
+  }
 }
